@@ -9,7 +9,7 @@
 تدعم اللغة العربية والإنجليزية وأكثر من 90 لغة أخرى، مع كشف تلقائي للغة.
 
 الصيغ الناتجة:
-  - TXT : النص الكامل فقط
+  - TXT : النص مقسّم إلى جمل، كل جملة بسطر مع طابعها الزمني [بداية --> نهاية]
   - SRT : ترجمات بطوابع زمنية (تصلح للفيديو)
   - VTT : ترجمات ويب WebVTT
   - JSON: بيانات كاملة تشمل توقيت كل مقطع وكل كلمة على حدة
@@ -37,9 +37,13 @@ def format_timestamp(seconds: float, vtt: bool = False) -> str:
 
 
 def write_txt(segments: list, path: Path) -> None:
+    """كتابة النص مقسّمًا إلى جمل (المقاطع الطبيعية من Whisper)، كل جملة بسطر
+    مع طابعها الزمني — وليس تقسيمًا لكل كلمة."""
     with path.open("w", encoding="utf-8") as f:
         for seg in segments:
-            f.write(seg["text"].strip() + "\n")
+            start = format_timestamp(seg["start"])
+            end = format_timestamp(seg["end"])
+            f.write(f"[{start} --> {end}] {seg['text'].strip()}\n")
 
 
 def write_srt(segments: list, path: Path) -> None:

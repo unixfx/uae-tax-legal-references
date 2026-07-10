@@ -42,7 +42,13 @@ class TestWriters(unittest.TestCase):
         out = self.path / "a.txt"
         write_txt(SEGMENTS, out)
         lines = out.read_text(encoding="utf-8").strip().splitlines()
-        self.assertEqual(lines, ["أهلاً بكم في هذا الشرح", "سنتحدث عن ضريبة الشركات"])
+        self.assertEqual(
+            lines,
+            [
+                "[00:00:00,000 --> 00:00:04,320] أهلاً بكم في هذا الشرح",
+                "[00:00:04,320 --> 00:00:09,150] سنتحدث عن ضريبة الشركات",
+            ],
+        )
 
     def test_srt(self):
         out = self.path / "a.srt"
